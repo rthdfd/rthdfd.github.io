@@ -26,9 +26,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
 
       - name: Install dependencies
         run: npm install
+
+      # 补全主题目录：themes/landscape 只包含自定义模板（categories.ejs 等），
+      # 其余模板/样式/脚本从 npm 主题包复制。缺少此步会导致主题目录不完整，
+      # Hexo 渲染出无模板的空页面（白屏）。不要删除此步骤。
+      - name: Complete theme directory
+        run: cp -r node_modules/hexo-theme-landscape/. themes/landscape/
 
       - name: Generate static files
         run: npx hexo generate
