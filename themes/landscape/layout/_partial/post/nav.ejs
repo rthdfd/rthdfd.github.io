@@ -1,0 +1,39 @@
+<%
+// 前后篇导航（自定义）：只关联「文章」分类（非「实用网站」）的文章
+// 「实用网站」分类的文章是外链卡片，不参与文章导航
+var isSitePost = function(p){
+  var s = false;
+  if (p.categories) p.categories.forEach(function(c){ if (c.name === '实用网站') s = true; });
+  return s;
+};
+// 按日期升序取全部非「实用网站」文章
+var siblings = site.posts.sort('date', 1).filter(function(p){ return !isSitePost(p); });
+var idx = -1;
+siblings.forEach(function(p, i){ if (p._id === post._id) idx = i; });
+var newer = (idx >= 0 && idx < siblings.length - 1) ? siblings[idx + 1] : null; // 后一篇（更新）
+var older = (idx > 0) ? siblings[idx - 1] : null; // 前一篇（更早）
+%>
+<nav id="article-nav">
+  <% if (newer){ %>
+    <a href="<%- url_for(newer.path) %>" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><%= __('newer') %></strong>
+      <div class="article-nav-title"><%= newer.title %></div>
+    </a>
+  <% } else { %>
+    <span id="article-nav-newer" class="article-nav-link-wrap" style="opacity: 0.45; cursor: default;">
+      <strong class="article-nav-caption"><%= __('newer') %></strong>
+      <div class="article-nav-title">已经是最后一篇了</div>
+    </span>
+  <% } %>
+  <% if (older){ %>
+    <a href="<%- url_for(older.path) %>" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><%= __('older') %></strong>
+      <div class="article-nav-title"><%= older.title %></div>
+    </a>
+  <% } else { %>
+    <span id="article-nav-older" class="article-nav-link-wrap" style="opacity: 0.45; cursor: default;">
+      <strong class="article-nav-caption"><%= __('older') %></strong>
+      <div class="article-nav-title">已经是第一篇了</div>
+    </span>
+  <% } %>
+</nav>
