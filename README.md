@@ -49,11 +49,12 @@ categories:
 
 ### 主题机制（重要，防白屏）
 
-- 主题源在 npm 包 `hexo-theme-landscape`（`^1.0.0`），仓库 `themes/landscape/` 只放**自定义模板**（目前只有 `layout/categories.ejs` 分类聚合页模板）
+- 主题源在 npm 包 `hexo-theme-landscape`（`^1.0.0`），仓库 `themes/landscape/` 只放**自定义模板**（目前只有 `layout/categories.ejs` 分类聚合页模板、`layout/home.ejs` 首页模板）
 - **Hexo 只要发现 `themes/landscape/` 目录存在，就以它为主题源**（不再用 node_modules 的完整主题）。若该目录不完整（缺 layout/ 模板、source/ 样式），构建出的页面是**无模板空壳 → 网站白屏**
 - 因此 `.github/workflows/deploy.yml` 中有一步 `Complete theme directory`（`cp -r node_modules/hexo-theme-landscape/. themes/landscape/`），**构建前自动补全主题目录，不要删除此步骤**
 - 本地验证构建时同理：若输出出现 `WARN No layout`，先执行 `cp -r node_modules/hexo-theme-landscape/. themes/landscape/` 再 `hexo generate`
 - 新增自定义模板时，只往 `themes/landscape/layout/` 加文件，不要动其他主题文件
+- **首页模板**：`themes/landscape/layout/home.ejs`（tab 结构：文章/实用网站），由 `_config.yml` 的 `index_generator.layout: home` 指定。**该文件顶部 front-matter `layout: false` 不能删**（自包含页面，删了首页会套上旧主题外壳）。首页「实用网站」面板自动列出该分类文章，文章 front-matter 加 `link:` 变外链、加 `description:` 自定义描述
 
 ### 关键文件说明
 
