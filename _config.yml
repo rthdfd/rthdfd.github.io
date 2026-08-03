@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hank 的博客
+title: rthdfd 的博客
 subtitle: 记录生活与思考
 description: ''
 keywords:
-author: Hank
+author: rthdfd
 language: zh-CN
 timezone: ''
 
@@ -69,6 +69,17 @@ default_category: uncategorized
 category_map:
 tag_map:
 
+# ============================
+# 分类管理（预留接口）
+# ============================
+# 新增分类步骤：
+#   1. 在下方 category_list 中新增一项（name 为分类名称，desc 为描述）
+#   2. 新文章的 front-matter 中 categories 引用对应的 name
+#   3. 重新部署后，分类页 /categories/ 与侧边栏会自动展示新分类
+category_list:
+  - name: 实用网站
+    desc: 免费、好用、值得收藏的实用网站
+
 # Metadata elements
 ## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
 meta_generator: true
@@ -102,3 +113,13 @@ theme: landscape
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: ''
+
+# ============================
+# Theme overrides（覆盖 landscape 主题默认配置）
+# ============================
+theme_config:
+  # 导航菜单：Categories 是未来所有分类的聚合入口
+  menu:
+    Home: /
+    Archives: /archives
+    Categories: /categories

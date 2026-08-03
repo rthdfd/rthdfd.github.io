@@ -30,7 +30,7 @@ date: 2026-08-03 12:00:00
 tags:
   - 标签一
 categories:
-  - 分类一
+  - 分类一   # 必须是下方「分类管理」中 category_list 已注册的分类
 ---
 
 正文内容，用 Markdown 写……
@@ -39,11 +39,19 @@ categories:
 3. 提交到 `main` 分支（commit message 用中文，如 `📝 发布新文章：xxx`）
 4. 等 GitHub Actions 跑完（约 2~3 分钟），文章会出现在 `https://hank.l.cd/年/月/日/标题/`
 
+### 分类管理（预留接口）
+
+- 所有分类**集中注册**在 `_config.yml` 的 `category_list` 中，目前只有：`实用网站`
+- **新增分类**只需两步：① 在 `category_list` 中新增一项（name/desc）→ ② 新文章的 front-matter `categories` 引用该 name
+- 分类聚合入口：导航菜单「Categories」→ `/categories/`，侧边栏也会自动展示所有分类
+- 博客的默认分类是 `实用网站`（`scaffolds/post.md` 模板已预设）
+- **删除文章** = 删除 `source/_posts/` 下对应文件。注意：当前 GitHub MCP 工具无法直接删除远程文件，需要用户在 GitHub 网页上手动删除，或把文件改为 `published: false` 停用
+
 ### 关键文件说明
 
 | 文件 | 作用 |
 |---|---|
-| `_config.yml` | 站点配置：标题、作者、URL 等（作者是 Hank） |
+| `_config.yml` | 站点配置：标题、作者、URL、**`category_list` 分类注册表**（加分类改这里） |
 | `source/_posts/*.md` | **所有文章**（在这里新增/修改） |
 | `source/CNAME` | 自定义域名标记，**不要删** |
 | `.github/workflows/deploy.yml` | 自动部署脚本，**不要删** |

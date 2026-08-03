@@ -1,0 +1,22 @@
+<div class="outer">
+  <div class="archive">
+    <h1 class="archive-title">分类</h1>
+    <div class="category-list">
+      <%
+        // 分类列表页：自动遍历所有已注册分类（_config.yml 的 category_list 中的分类，
+        // 在文章 front-matter 的 categories 引用后会自动出现在这里）
+        var descMap = {};
+        (config.category_list || []).forEach(function(c) { descMap[c.name] = c.desc; });
+        site.categories.sort('name').forEach(function(category) {
+      %>
+        <div class="category-list-item">
+          <a class="category-list-link" href="<%- url_for(category.path) %>"><%= category.name %></a>
+          <span class="category-list-count"><%= category.length %></span>
+          <% if (descMap[category.name]) { %>
+            <p class="category-list-desc"><%= descMap[category.name] %></p>
+          <% } %>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</div>
