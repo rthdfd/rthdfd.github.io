@@ -13,6 +13,8 @@
     </div>
     <div id="header-inner" class="inner">
       <nav id="main-nav">
+        <a class="main-nav-link" href="javascript:history.back();" title="返回上一页">← 返回</a>
+        <a class="main-nav-link" href="<%- url_for('/') %>">⌂ 首页</a>
         <% for (var i in config.theme_config.menu){ %>
           <a class="main-nav-link" href="<%- url_for(config.theme_config.menu[i]) %>"><%= i %></a>
         <% } %>
