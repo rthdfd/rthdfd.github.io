@@ -14,7 +14,7 @@
 |---|---|
 | 仓库 | `rthdfd/rthdfd.github.io`（默认分支 `main`） |
 | 博客框架 | Hexo 8（Node.js 22，依赖通过 npm 安装） |
-| 主题 | landscape（npm 依赖形式，非 themes/ 目录） |
+| 主题 | landscape（`themes/landscape/` 含自定义模板，CI 构建时自动补全完整主题，见「主题机制」） |
 | 自定义域名 | `hank.l.cd`（CNAME → `rthdfd.github.io`，标记文件在 `source/CNAME`） |
 | 部署方式 | GitHub Actions 自动构建（`.github/workflows/deploy.yml`），**push 到 main 即自动发布**，无需手动构建 |
 
@@ -43,9 +43,17 @@ categories:
 
 - 所有分类**集中注册**在 `_config.yml` 的 `category_list` 中，目前只有：`实用网站`
 - **新增分类**只需两步：① 在 `category_list` 中新增一项（name/desc）→ ② 新文章的 front-matter `categories` 引用该 name
-- 分类聚合入口：导航菜单「Categories」→ `/categories/`，侧边栏也会自动展示所有分类
+- 分类聚合入口：导航菜单「Categories」→ `/categories/`（由 `themes/landscape/layout/categories.ejs` 自动列出所有分类），侧边栏也会自动展示
 - 博客的默认分类是 `实用网站`（`scaffolds/post.md` 模板已预设）
 - **删除文章** = 删除 `source/_posts/` 下对应文件。注意：当前 GitHub MCP 工具无法直接删除远程文件，需要用户在 GitHub 网页上手动删除，或把文件改为 `published: false` 停用
+
+### 主题机制（重要，防白屏）
+
+- 主题源在 npm 包 `hexo-theme-landscape`（`^1.0.0`），仓库 `themes/landscape/` 只放**自定义模板**（目前只有 `layout/categories.ejs` 分类聚合页模板）
+- **Hexo 只要发现 `themes/landscape/` 目录存在，就以它为主题源**（不再用 node_modules 的完整主题）。若该目录不完整（缺 layout/ 模板、source/ 样式），构建出的页面是**无模板空壳 → 网站白屏**
+- 因此 `.github/workflows/deploy.yml` 中有一步 `Complete theme directory`（`cp -r node_modules/hexo-theme-landscape/. themes/landscape/`），**构建前自动补全主题目录，不要删除此步骤**
+- 本地验证构建时同理：若输出出现 `WARN No layout`，先执行 `cp -r node_modules/hexo-theme-landscape/. themes/landscape/` 再 `hexo generate`
+- 新增自定义模板时，只往 `themes/landscape/layout/` 加文件，不要动其他主题文件
 
 ### 关键文件说明
 
