@@ -169,9 +169,18 @@ layout: false
 
 <section id="posts-panel" class="panel active">
     <h2>文章</h2>
-    <% if (page.posts.length) { %>
+    <%
+        // 「文章」面板：显示所有文章，但排除「实用网站」分类下的文章（那些归「实用网站」面板管）
+        var normalPosts = [];
+        page.posts.each(function(post){
+            var inSites = false;
+            post.categories.forEach(function(c){ if (c.name === '实用网站') inSites = true; });
+            if (!inSites) normalPosts.push(post);
+        });
+    %>
+    <% if (normalPosts.length) { %>
         <div class="link-list">
-            <% page.posts.each(function(post){ %>
+            <% normalPosts.forEach(function(post){ %>
                 <a href="<%- url_for(post.path) %>" class="link-item">
                     <%= post.title %>
                     <span class="link-desc"><%= post.date.format('YYYY-MM-DD') %></span>
