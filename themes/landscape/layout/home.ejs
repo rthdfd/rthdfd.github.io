@@ -1,0 +1,234 @@
+---
+layout: false
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= config.title %></title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-main: #333333;
+            --text-sub: #666666;
+            --accent: #2563eb;
+            --border: #e5e7eb;
+            --card-bg: #f9fafb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .subtitle {
+            color: var(--text-sub);
+            font-size: 0.9rem;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-btn {
+            appearance: none;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-main);
+            padding: 0.7rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: #eff6ff;
+        }
+
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            padding-left: 0.5rem;
+            border-left: 3px solid var(--accent);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-sub);
+            background: var(--card-bg);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .link-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+            overflow-wrap: anywhere;
+        }
+
+        .link-item:hover {
+            border-color: var(--accent);
+        }
+
+        .link-desc {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            margin-top: 0.2rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            text-align: center;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 1.2rem 0.75rem;
+            }
+
+            .tabs {
+                gap: 0.5rem;
+            }
+
+            .tab-btn {
+                font-size: 0.88rem;
+                padding: 0.6rem 0.35rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1><a href="<%- url_for() %>" style="color: inherit; text-decoration: none;"><%= config.title %></a></h1>
+    <div class="subtitle"><%= config.subtitle %></div>
+</header>
+
+<div class="tabs">
+    <button class="tab-btn active" data-target="posts-panel" type="button">文章</button>
+    <button class="tab-btn" data-target="sites-panel" type="button">实用网站</button>
+</div>
+
+<section id="posts-panel" class="panel active">
+    <h2>文章</h2>
+    <% if (page.posts.length) { %>
+        <div class="link-list">
+            <% page.posts.each(function(post){ %>
+                <a href="<%- url_for(post.path) %>" class="link-item">
+                    <%= post.title %>
+                    <span class="link-desc"><%= post.date.format('YYYY-MM-DD') %></span>
+                </a>
+            <% }) %>
+        </div>
+        <% if (page.total > 1) { %>
+            <nav style="margin-top: 1.5rem; text-align: center;">
+                <%- paginator({ prev_text: '← 上一页', next_text: '下一页 →', escape: false }) %>
+            </nav>
+        <% } %>
+    <% } else { %>
+        <div class="empty-state">暂无文章</div>
+    <% } %>
+</section>
+
+<section id="sites-panel" class="panel">
+    <h2>实用网站</h2>
+    <%
+        // 「实用网站」面板：自动列出分类为「实用网站」的文章
+        // 若文章 front-matter 有 link 字段则作为外部链接（新窗口打开），否则跳到文章页
+        var sitesCategory = site.categories.findOne({ name: '实用网站' });
+    %>
+    <% if (sitesCategory && sitesCategory.posts.length) { %>
+        <div class="link-list">
+            <% sitesCategory.posts.sort('date', -1).each(function(post){ %>
+                <a href="<%- url_for(post.link || post.path) %>" class="link-item"<%= post.link ? ' target="_blank" rel="noopener"' : '' %>>
+                    <%= post.title %>
+                    <span class="link-desc"><%= post.description || '点击查看' %></span>
+                </a>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <div class="empty-state">暂无内容</div>
+    <% } %>
+</section>
+
+<footer>
+    &copy; <%= date(new Date(), 'YYYY') %> <%= config.author || config.title %>
+</footer>
+
+<script>
+    const buttons = document.querySelectorAll(".tab-btn");
+    const panels = document.querySelectorAll(".panel");
+
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+            const target = button.dataset.target;
+
+            buttons.forEach(btn => btn.classList.remove("active"));
+            panels.forEach(panel => panel.classList.remove("active"));
+
+            button.classList.add("active");
+            document.getElementById(target).classList.add("active");
+        });
+    });
+</script>
+
+</body>
+</html>

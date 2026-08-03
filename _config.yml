@@ -63,6 +63,7 @@ index_generator:
   path: ''
   per_page: 10
   order_by: -date
+  layout: home # 首页使用自定义模板 themes/landscape/layout/home.ejs（tab 结构），勿改回 index
 
 # Category & Tag
 default_category: uncategorized
