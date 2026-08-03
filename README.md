@@ -43,13 +43,13 @@ categories:
 
 - 所有分类**集中注册**在 `_config.yml` 的 `category_list` 中，目前只有：`实用网站`
 - **新增分类**只需两步：① 在 `category_list` 中新增一项（name/desc）→ ② 新文章的 front-matter `categories` 引用该 name
-- 分类聚合入口：导航菜单「Categories」→ `/categories/`（由 `themes/landscape/layout/categories.ejs` 自动列出所有分类），侧边栏也会自动展示
+- 分类聚合入口：导航菜单「分类」→ `/categories/`（由 `themes/landscape/layout/categories.ejs` 自动列出所有分类）
 - 博客的默认分类是 `实用网站`（`scaffolds/post.md` 模板已预设）
 - **删除文章** = 删除 `source/_posts/` 下对应文件。注意：当前 GitHub MCP 工具无法直接删除远程文件，需要用户在 GitHub 网页上手动删除，或把文件改为 `published: false` 停用
 
 ### 主题机制（重要，防白屏）
 
-- 主题源在 npm 包 `hexo-theme-landscape`（`^1.0.0`），仓库 `themes/landscape/` 只放**自定义模板**（目前只有 `layout/categories.ejs` 分类聚合页模板、`layout/home.ejs` 首页模板、`layout/_partial/post/nav.ejs` 文章导航）
+- 主题源在 npm 包 `hexo-theme-landscape`（`^1.0.0`），仓库 `themes/landscape/` 只放**自定义模板**（目前只有 `layout/categories.ejs` 分类聚合页模板、`layout/home.ejs` 首页模板）
 - **Hexo 只要发现 `themes/landscape/` 目录存在，就以它为主题源**（不再用 node_modules 的完整主题）。若该目录不完整（缺 layout/ 模板、source/ 样式），构建出的页面是**无模板空壳 → 网站白屏**
 - 因此 `.github/workflows/deploy.yml` 中有一步 `Complete theme directory`（`cp -rn node_modules/hexo-theme-landscape/. themes/landscape/`），**构建前自动补全主题目录；`-n` 不覆盖已有自定义模板，此步骤不要删除**
 - 本地验证构建时同理：若输出出现 `WARN No layout`，先执行 `cp -r node_modules/hexo-theme-landscape/. themes/landscape/` 再 `hexo generate`
@@ -57,6 +57,7 @@ categories:
 - **首页模板**：`themes/landscape/layout/home.ejs`（tab 结构：文章/实用网站 + hero 横幅），由 `_config.yml` 的 `index_generator.layout: home` 指定。**该文件顶部 front-matter `layout: false` 不能删**（自包含页面，删了首页会套上旧主题外壳）。面板逻辑：「文章」tab = 非「实用网站」分类的文章；「实用网站」tab = 该分类文章，文章 front-matter 加 `link:` 变外链（新窗口）、加 `description:` 自定义描述
 - **侧边栏已全局关闭**：`_config.yml` 的 `theme_config.sidebar: false`（分类/归档/最新文章等 widget 不显示），不要改回 true
 - **文章前后篇导航**：`themes/landscape/layout/_partial/post/nav.ejs` 为自定义版——只关联「文章」分类（非实用网站）的文章，边界显示「已经是最后一篇了/已经是第一篇了」；实用网站文章（外链卡片）不参与导航
+- **页面顶部导航已精简**：文章页/归档页 header 删除了三条杠（汉堡菜单）、RSS 图标、搜索按钮；导航菜单为中文（首页/归档/分类），配置在 `theme_config.menu`（键名即显示文字）。**当前无搜索功能**，如需要可加本地搜索插件
 
 ### 关键文件说明
 
