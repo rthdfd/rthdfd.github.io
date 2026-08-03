@@ -119,10 +119,10 @@ deploy:
 # Theme overrides（覆盖 landscape 主题默认配置）
 # ============================
 theme_config:
-  # 导航菜单：Categories 是未来所有分类的聚合入口
+  # 导航菜单（键名会直接显示在导航栏，用中文）
   menu:
-    Home: /
-    Archives: /archives
-    Categories: /categories
+    首页: /
+    归档: /archives
+    分类: /categories
   # 全局关闭侧边栏（分类/归档/最新文章等 widget 不再显示）
   sidebar: false
