@@ -33,27 +33,6 @@ layout: false
             margin: 0 auto;
         }
 
-        .back-btn {
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 100;
-            padding: 0.4rem 0.8rem;
-            background: rgba(255, 255, 255, 0.92);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 0.85rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            transition: border-color 0.2s;
-        }
-
-        .back-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
         header {
             margin-bottom: 2rem;
             border-bottom: 1px solid var(--border);
@@ -201,8 +180,6 @@ layout: false
     </style>
 </head>
 <body>
-
-<a href="javascript:history.back();" class="back-btn" title="返回上一页">← 返回</a>
 
 <header class="hero">
     <h1><a href="<%- url_for() %>"><%= config.title %></a></h1>
